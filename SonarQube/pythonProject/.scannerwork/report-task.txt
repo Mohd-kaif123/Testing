@@ -1,0 +1,6 @@
+projectKey=python-project
+serverUrl=http://localhost:9000
+serverVersion=26.6.0.123539
+dashboardUrl=http://localhost:9000/dashboard?id=python-project
+ceTaskId=819b8780-b269-4edb-a89e-7812f9a87ebe
+ceTaskUrl=http://localhost:9000/api/ce/task?id=819b8780-b269-4edb-a89e-7812f9a87ebe
