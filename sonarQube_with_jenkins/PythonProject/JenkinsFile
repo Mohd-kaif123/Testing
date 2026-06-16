@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        SONAR_PROJECT_KEY = "python-project"
+        SONAR_PROJECT_KEY = "sqa_62308f5a320fd01ee6180c2ac1951dcf9277620c"
     }
 
     stages {
@@ -10,7 +10,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 git branch: 'main',
-                url: 'https://github.com/Mohd-kaif123/Testing/sonarQube_with_jenkins/PythonProject.git'
+                url: 'https://github.com/Mohd-kaif123/Testing.git'
             }
         }
 
