@@ -2,7 +2,8 @@ pipeline {
     agent any
 
     environment {
-        SONAR_PROJECT_KEY = "sqa_62308f5a320fd01ee6180c2ac1951dcf9277620c"
+        SONAR_PROJECT_KEY = "python-project"
+        PROJECT_DIR = "sonarQube_with_jenkins/PythonProject"
     }
 
     stages {
@@ -17,7 +18,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
-                cd sonarQube_with_jenkins/PythonProject
+                cd $PROJECT_DIR
                 python3 -m venv venv
                 . venv/bin/activate
                 pip install -r requirements.txt
@@ -28,7 +29,7 @@ pipeline {
         stage('Unit Test') {
             steps {
                 sh '''
-                cd sonarQube_with_jenkins/PythonProject
+                cd $PROJECT_DIR
                 . venv/bin/activate
                 pytest tests/
                 '''
@@ -39,8 +40,12 @@ pipeline {
             steps {
                 withSonarQubeEnv('SonarQube') {
                     sh '''
-                    cd sonarQube_with_jenkins/PythonProject
-                    sonar-scanner
+                    cd $PROJECT_DIR
+                    sonar-scanner \
+                      -Dsonar.projectKey=python-project \
+                      -Dsonar.sources=app \
+                      -Dsonar.tests=tests \
+                      -Dsonar.python.version=3.12
                     '''
                 }
             }
@@ -74,7 +79,6 @@ pipeline {
         success {
             echo 'Pipeline Completed Successfully'
         }
-
         failure {
             echo 'Pipeline Failed'
         }
