@@ -17,6 +17,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
+                cd sonarQube_with_jenkins/PythonProject
                 python3 -m venv venv
                 . venv/bin/activate
                 pip install -r requirements.txt
@@ -27,6 +28,7 @@ pipeline {
         stage('Unit Test') {
             steps {
                 sh '''
+                cd sonarQube_with_jenkins/PythonProject
                 . venv/bin/activate
                 pytest tests/
                 '''
@@ -37,6 +39,7 @@ pipeline {
             steps {
                 withSonarQubeEnv('SonarQube') {
                     sh '''
+                    cd sonarQube_with_jenkins/PythonProject
                     sonar-scanner
                     '''
                 }
