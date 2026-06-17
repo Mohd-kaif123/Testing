@@ -3,7 +3,6 @@ pipeline {
 
     environment {
         SONAR_PROJECT_KEY = "python-project"
-        PROJECT_DIR = "sonarQube_with_jenkins/PythonProject"
     }
 
     stages {
@@ -17,34 +16,33 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh '''
-                echo "Current dir: $(pwd)
-                find . -name  "requirements.txt"
-                '''
+                dir('sonarQube_with_jenkins/PythonProject') {
+                    sh '''
+                    python3 -m venv venv
+                    . venv/bin/activate
+                    pip install -r requirements.txt
+                    '''
+                }
             }
         }
 
         stage('Unit Test') {
             steps {
-                sh '''
-                cd $PROJECT_DIR
-                . venv/bin/activate
-                pytest tests/
-                '''
+                dir('sonarQube_with_jenkins/PythonProject') {
+                    sh '''
+                    . venv/bin/activate
+                    pytest tests/
+                    '''
+                }
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('SonarQube') {
-                    sh '''
-                    cd $PROJECT_DIR
-                    sonar-scanner \
-                      -Dsonar.projectKey=python-project \
-                      -Dsonar.sources=app \
-                      -Dsonar.tests=tests \
-                      -Dsonar.python.version=3.12
-                    '''
+                dir('sonarQube_with_jenkins/PythonProject') {
+                    withSonarQubeEnv('SonarQube') {
+                        sh 'sonar-scanner'
+                    }
                 }
             }
         }
